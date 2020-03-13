@@ -1,0 +1,16 @@
+PODS:
+  - GitFileAccess (0.1.0)
+
+DEPENDENCIES:
+  - GitFileAccess (from `../`)
+
+EXTERNAL SOURCES:
+  GitFileAccess:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  GitFileAccess: 62fc899fc9456eb352224c41ff88d6a3f17208fa
+
+PODFILE CHECKSUM: cdaab725bc9b4a3954d5ccab3ce15d754ea26136
+
+COCOAPODS: 1.7.5

@@ -1,0 +1,6 @@
+use_frameworks!
+target 'GitFileAccess_Tests' do
+  pod 'GitFileAccess', :path => '../'
+  
+  
+end
