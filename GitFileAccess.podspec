@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'GitFileAccess'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'Use github as a fileserver'
   s.swift_version    = '5.0'
 

@@ -5,14 +5,31 @@ import RxLoadableResult
 import LoadableResult
 import RxSwift
 
-public struct GitFileAccess {
+public protocol GitFileAccessProtocl {
+    func data(for resource: String) -> LoadingObservable<Data>
+}
 
-    enum GitFileAccessError: Swift.Error {
-        case invalidUrl
-        case dataTaskError(Swift.Error)
-        case emptyData
-        case couldNotDecode
+public enum GitFileAccessError: Swift.Error {
+    case invalidUrl
+    case dataTaskError(Swift.Error)
+    case emptyData
+    case couldNotDecode
+}
+
+extension GitFileAccessProtocl {
+    public func object<Decoded>(for resource: String, decodeAs type: Decoded.Type, decoder: JSONDecoder = JSONDecoder()) -> LoadingObservable<Decoded> where Decoded : Decodable {
+        data(for: resource).mapLoadableResult { data -> LoadableResult<Decoded> in
+            do {
+                let decoded = try decoder.decode(type, from: data)
+                return .loaded(decoded)
+            } catch {
+                return .error(GitFileAccessError.couldNotDecode)
+            }
+        }
     }
+}
+
+public struct GitFileAccess: GitFileAccessProtocl {
 
     let accountName: String
     let repoName: String
@@ -53,17 +70,6 @@ public struct GitFileAccess {
             task.resume()
             return Disposables.create {
                 task.cancel()
-            }
-        }
-    }
-
-    public func object<Decoded>(for resource: String, decodeAs type: Decoded.Type, decoder: JSONDecoder = JSONDecoder()) -> LoadingObservable<Decoded> where Decoded : Decodable {
-        data(for: resource).mapLoadableResult { data -> LoadableResult<Decoded> in
-            do {
-                let decoded = try decoder.decode(type, from: data)
-                return .loaded(decoded)
-            } catch {
-                return .error(GitFileAccessError.couldNotDecode)
             }
         }
     }
